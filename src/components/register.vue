@@ -1,22 +1,22 @@
 <template>
-  <q-page class="flex flex-center">
-
-<q-form
-      @submit="onSubmit"
-      class="q-gutter-md"
-      style="width:320px;"
-    >
-    <img
-      src="http://demo.saylance.com/uploads/settings/general/1598015912-Custom%20dimensions%20214x50%20px.png"
-      style="margin:0 auto 30px; display:block;" 
-    />
+  <div>
+    <q-form @submit="onSubmit" class="q-gutter-md q-pa-md" style="width: 400px">
       <q-input
-      type="email"
+        type="text"
+        v-model="userName"
+        color="brand"
+        label="User Name *"
+        lazy-rules
+        :rules="[(val) => (val && val.length > 0) || 'Please type your user name']"
+      />
+
+      <q-input
+        type="email"
         v-model="email"
         color="brand"
         label="E-mail id *"
         lazy-rules
-        :rules="[ val => val && val.length > 0 || 'Please type your email']"
+        :rules="[(val) => (val && val.length > 0) || 'Please type your email']"
       />
 
       <q-input
@@ -26,42 +26,51 @@
         label="Your password *"
         lazy-rules
         :rules="[
-          val => val !== null && val !== '' || 'Please enter password'
+          (val) => (val !== null && val !== '') || 'Please enter password',
         ]"
       />
 
-      <q-checkbox color="brand" v-model="accept" label="Remember me" />
-
       <div>
-        <q-btn label="Login" class="full-width" type="submit" color="brand"/>
-        
+        <q-btn label="Login" class="full-width" type="submit" color="brand" />
       </div>
+      <q-btn flat color="brand" label="Already a member?" to="/" />
     </q-form>
-  </q-page>
+  </div>
 </template>
 
 <script>
 export default {
-  name: 'Register',
-  data () {
+  name: "Register",
+  data() {
     return {
       email: null,
+      userName: null,
       password: null,
-      accept: false
-    }
+      accept: false,
+    };
   },
-
+mounted(){
+  this.checkUser();
+},
   methods: {
-    onSubmit () {
-      if (this.accept !== true) {
-        
-        this.$router.push({path: '/projects'});
+    checkUser(){
+    this.$store.commit('users/setCurrentUser', null);
+  },
+    onSubmit() {
+      var adduser = {
+        userName: this.userName,
+        email: this.email,
+        password: this.password
       }
-      else {
-        
-        this.$router.push({path: '/projects'});
-      }
-    }
-  }
-}
+      this.$store.commit('users/registerUser', adduser);
+      this.$q.notify({
+        type: 'positive',
+        message: `user added successfully`
+      })
+
+      console.log(this.$store.getters["users/currentUser"])
+        this.$router.push({ path: "/" });
+    },
+  },
+};
 </script>
