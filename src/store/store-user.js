@@ -5,7 +5,12 @@ users:[{
     email:"patelsrinath29@gmail.com",
     password: '123456789'
 }],
-currentUser: null
+currentUser: null,
+userFiles:[{
+    email: "patelsrinath29@gmail.com",
+    fileName:"demo",
+    filePath: "https://cdn.quasar.dev/logo/svg/quasar-logo.svg" 
+}]
 }
 
 const mutations = {
@@ -14,6 +19,9 @@ const mutations = {
     },
     registerUser: (state, user) => {
         state.users.push(user);
+    },
+    addFile: (state, userFile) => {
+        state.userFiles.push(userFile);
     }
 }
 
@@ -27,6 +35,9 @@ const getters = {
     },
     currentUser: (state) => {
         return state.currentUser
+    },
+    getFiles: (state) => {
+        return state.userFiles
     }
 }
 
